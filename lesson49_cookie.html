@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      p {
+        font-weight: bold;
+      }
+      .topic {
+        text-decoration: underline;
+        margin: 10px;
+      }
+      .task {
+        margin: 20px 10px;
+      }
+      .container {
+        padding-bottom: 15px;
+        border-bottom: 1px black solid;
+      }
+      .symbolOK,
+      .dateEntered {
+        display: inline;
+        visibility: hidden;
+      }
+    </style>
+
+    <p>Задание 1</p>
+
+    <div class="topic">Основы работы</div>
+    <div class="task">
+      Установите куку с именем 'name' и значением 'Иван'. Выведите содержимое
+      этой куки на экран.
+    </div>
+
+    <div class="container divT1"></div>
+
+    <p>Задание 2</p>
+
+    <div class="task">
+      Установите куку с вашем именем и вашим возрастом. Выведите на экран
+      содержимое этих двух кук.
+    </div>
+
+    <div class="container divT2"></div>
+
+    <p>Задание 3</p>
+
+    <div class="topic">Практика</div>
+    <div class="task">
+      Дан инпут. Ведите в него город, например, Минск. Сохраните его в куки.
+      Зайдя на другую страницу сайта вы должны увидеть фразу 'ваш город -
+      Минск'.
+    </div>
+
+    <input type="text" placeholder="Введите город" class="city" />
+    <div class="symbolOK">
+      &#9989; Название города сохранено в памяти, перезагрузите страницу
+    </div>
+    <div class="container divT3"></div>
+
+    <p>Задание 4</p>
+
+    <div class="task">
+      При заходе на страницу спросите с помощью инпута день рождения
+      пользователя. Когда он зайдет с следующий раз - напишите сколько месяцев,
+      дней, часов, минут и секунд осталось до его дня рождения. И пусть по этим
+      числам запуститься обратный отсчет (то есть они будут тикать).
+    </div>
+
+    <input type="date" class="dateOfBirth" />
+    <div class="dateEntered">
+      &#9989; Дата сохранена в памяти, перезагрузите страницу
+    </div>
+    <div class="container divT4"></div>
+
+    <script>
+      // http://old.code.mu/tasks/javascript/advanced/rabota-s-kuki-v-javascript.html
+
+      // задание 1
+
+      const d = document
+      const divT1 = d.querySelector('.divT1')
+
+      function outputOfResult(parent, receivedValue, initialValue = 'none') {
+        if (initialValue !== 'none') {
+          const sourceString = `Исходная строка: ${initialValue}`
+          const newDiv = d.createElement('div')
+          parent.appendChild(newDiv)
+          newDiv.innerHTML = sourceString
+        }
+
+        const modifiedString = `Результат: ${receivedValue}`
+        const newDiv2 = d.createElement('div')
+        parent.appendChild(newDiv2)
+        newDiv2.innerHTML = modifiedString
+      }
+
+      function getCookie(name) {
+        let matches = d.cookie.match(
+          new RegExp(
+            '(?:^|; )' +
+              name.replace(/([\.$?*\+\\\/{}|\(\)\[\]^])/g, '\\$1') +
+              '=(.*?)(?:;|$)'
+          )
+        )
+        console.log(matches)
+        return matches ? decodeURIComponent(matches[1]) : undefined
+        //matches.input
+
+        // let matches = document.cookie.match(
+        //   new RegExp(
+        //     '(?:^|; )' +
+        // name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') +
+        // '=([^;]*)'
+        //   )
+        // )
+        // return matches ? decodeURIComponent(matches[1]) : undefined
+      }
+
+      d.cookie = 'name=Иван'
+      const str = getCookie('name')
+
+      outputOfResult(divT1, str)
+
+      // задание 2
+
+      const divT2 = d.querySelector('.divT2')
+      d.cookie = 'MyName=Andrey'
+      d.cookie = 'myAge=37'
+      const str2 = getCookie('MyName')
+      const str3 = getCookie('myAge')
+
+      outputOfResult(divT2, str2)
+      outputOfResult(divT2, str3)
+
+      // задание 3
+
+      const divT3 = d.querySelector('.divT3')
+      const enteredCity = d.querySelector('.city')
+      const symbolOK = d.querySelector('.symbolOK')
+
+      enteredCity.addEventListener('keydown', function (e) {
+        if (e.keyCode === 13) {
+          d.cookie = `yourCity=${enteredCity.value}`
+          symbolOK.style.visibility = 'visible'
+        }
+      })
+
+      const str4 = `ваш город - ${getCookie('yourCity')}`
+
+      outputOfResult(divT3, str4)
+
+      // задание 4
+
+      const divT4 = d.querySelector('.divT4')
+      const dateOfBirth = d.querySelector('.dateOfBirth')
+      const dateEntered = d.querySelector('.dateEntered')
+    </script>
+  </body>
+</html>
