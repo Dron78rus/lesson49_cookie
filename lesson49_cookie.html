@@ -27,6 +27,10 @@
         display: inline;
         visibility: hidden;
       }
+      .confirmationOfInput {
+        height: 24px;
+        margin: 0 5px 0 5px;
+      }
     </style>
 
     <p>Задание 1</p>
@@ -67,16 +71,20 @@
 
     <div class="task">
       При заходе на страницу спросите с помощью инпута день рождения
-      пользователя. Когда он зайдет с следующий раз - напишите сколько месяцев,
+      пользователя. Когда он зайдет в следующий раз - напишите, сколько месяцев,
       дней, часов, минут и секунд осталось до его дня рождения. И пусть по этим
-      числам запуститься обратный отсчет (то есть они будут тикать).
+      числам запустится обратный отсчет (то есть они будут тикать).
     </div>
 
-    <input type="date" class="dateOfBirth" />
+    <input type="date" class="dateOfBirth" /><input
+      type="button"
+      value="готово"
+      class="confirmationOfInput"
+    />
     <div class="dateEntered">
       &#9989; Дата сохранена в памяти, перезагрузите страницу
     </div>
-    <div class="container divT4"></div>
+    <div class="container divT4">введите дату рождения</div>
 
     <script>
       // http://old.code.mu/tasks/javascript/advanced/rabota-s-kuki-v-javascript.html
@@ -151,7 +159,7 @@
         }
       })
 
-      const str4 = `ваш город - ${getCookie('yourCity')}`
+      str4 = `ваш город - ${getCookie('yourCity')}`
 
       outputOfResult(divT3, str4)
 
@@ -160,6 +168,79 @@
       const divT4 = d.querySelector('.divT4')
       const dateOfBirth = d.querySelector('.dateOfBirth')
       const dateEntered = d.querySelector('.dateEntered')
+      const confirmationOfInput = d.querySelector('.confirmationOfInput')
+
+      function storeDateValue() {
+        d.cookie = `yourDateOfBirth=${dateOfBirth.value}`
+        dateEntered.style.visibility = 'visible'
+        confirmationOfInput.value = 'Остановить таймер'
+        confirmationOfInput.removeEventListener('click', storeDateValue)
+        confirmationOfInput.addEventListener('click', stopTimer)
+      }
+
+      function stopTimer() {
+        clearInterval(timerId)
+        confirmationOfInput.value = 'Ввести дату'
+        confirmationOfInput.addEventListener('click', storeDateValue)
+      }
+
+      confirmationOfInput.addEventListener('click', storeDateValue)
+
+      if (
+        getCookie('yourDateOfBirth') !== '' ||
+        getCookie('yourDateOfBirth') !== undefined
+      ) {
+        startCounting()
+
+        confirmationOfInput.removeEventListener('click', storeDateValue)
+        confirmationOfInput.addEventListener('click', stopTimer)
+      }
+
+      function startCounting() {
+        confirmationOfInput.value = 'Остановить таймер'
+        timerId = setInterval(() => {
+          const todaysDate = new Date()
+          const monthOfBirth =
+            getCookie('yourDateOfBirth').match(/-(\d\d)-(\d\d)/)[1]
+          const dayOfBirth =
+            getCookie('yourDateOfBirth').match(/-(\d\d)-(\d\d)/)[2]
+          let numberOfMonths = monthOfBirth - todaysDate.getMonth()
+          let numberOfDays = dayOfBirth - todaysDate.getDate()
+          const numberOfHours = 24 - todaysDate.getHours()
+          const numberOfMinutes = 59 - todaysDate.getMinutes()
+          const numberOfSeconds = 59 - todaysDate.getSeconds()
+
+          if (monthOfBirth > todaysDate.getMonth()) {
+            numberOfMonths = numberOfMonths - 1
+          } else {
+            numberOfMonths = numberOfMonths + 10
+          }
+
+          if (
+            monthOfBirth == todaysDate.getMonth() + 1 &&
+            dayOfBirth > todaysDate.getDate()
+          ) {
+            numberOfMonths = numberOfMonths
+          }
+
+          if (
+            monthOfBirth == todaysDate.getMonth() + 1 &&
+            dayOfBirth < todaysDate.getDate()
+          ) {
+            numberOfMonths = numberOfMonths + 11
+          }
+
+          if (dayOfBirth > todaysDate.getDate()) {
+            numberOfDays = numberOfDays - 1
+          } else {
+            numberOfDays = numberOfDays + 30
+          }
+
+          const str = `время до вашего дня рождения ${numberOfMonths} месяцев: ${numberOfDays} дней: ${numberOfHours} часов: ${numberOfMinutes} минут: ${numberOfSeconds} секунд`
+          divT4.removeChild(divT4.firstChild)
+          outputOfResult(divT4, str)
+        }, 1000)
+      }
     </script>
   </body>
 </html>
