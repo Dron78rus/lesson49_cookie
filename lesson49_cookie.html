@@ -31,6 +31,9 @@
         height: 24px;
         margin: 0 5px 0 5px;
       }
+      .entryField {
+        display: block;
+      }
     </style>
 
     <p>Задание 1</p>
@@ -85,6 +88,45 @@
       &#9989; Дата сохранена в памяти, перезагрузите страницу
     </div>
     <div class="container divT4">введите дату рождения</div>
+
+    <p>Задание 5</p>
+
+    <div class="task">
+      Дана форма с инпутами. Пользователь вводит какие-то данные и закрывает
+      страницу (не факт, что он заполнил всю форму). Сделайте так, чтобы при
+      следующем заходе на страницу введенные им ранее данные стояли на своих
+      местах.
+    </div>
+
+    <input type="text" class="someTextTask5_1" /><input
+      type="button"
+      value="готово"
+      class="confirmationOfInputTask5_1"
+    />
+    <br /><input type="text" class="someTextTask5_2" /><input
+      type="button"
+      value="готово"
+      class="confirmationOfInputTask5_2"
+    />
+    <br /><input type="text" class="someTextTask5_3" /><input
+      type="button"
+      value="готово"
+      class="confirmationOfInputTask5_3"
+    />
+    <br />
+    <input type="text" class="entryField someTextTask5_4" />
+    <input type="text" class="entryField someTextTask5_5" />
+    <input type="text" class="entryField someTextTask5_6" />
+
+    <div class="container divT5"></div>
+
+    <p>Задание 6</p>
+
+    <div class="task">
+      Даны чекбоксы. Пользователь произвольно отмечает их и закрывает страницу.
+      Сделайте так, чтобы при следующем заходе на страницу чекбоксы стали
+      отмеченными так, как это сделал пользователь ранее.
+    </div>
 
     <script>
       // http://old.code.mu/tasks/javascript/advanced/rabota-s-kuki-v-javascript.html
@@ -159,7 +201,7 @@
         }
       })
 
-      str4 = `ваш город - ${getCookie('yourCity')}`
+      const str4 = `ваш город - ${getCookie('yourCity')}`
 
       outputOfResult(divT3, str4)
 
@@ -241,6 +283,92 @@
           outputOfResult(divT4, str)
         }, 1000)
       }
+
+      // задание 5
+
+      const divT5 = d.querySelector('.divT5')
+      const someTextTask5_1 = d.querySelector('.someTextTask5_1')
+      const someTextTask5_2 = d.querySelector('.someTextTask5_2')
+      const someTextTask5_3 = d.querySelector('.someTextTask5_3')
+      const someTextTask5_4 = d.querySelector('.someTextTask5_4')
+      const someTextTask5_5 = d.querySelector('.someTextTask5_5')
+      const someTextTask5_6 = d.querySelector('.someTextTask5_6')
+
+      const entryField = d.querySelectorAll('.entryField')
+
+      function getCookie2(name) {
+        let matches = d.cookie.match(
+          new RegExp(
+            '(?:^|; )' +
+              'entryField ' +
+              name.replace(/([\.$?*\+\\\/{}|\(\)\[\]^])/g, '\\$1') +
+              '=(.*?)(?:;|$)'
+          )
+        )
+        console.log(matches)
+        return matches ? decodeURIComponent(matches[1]) : undefined
+      }
+
+      const confirmationOfInputTask5_1 = d.querySelector(
+        '.confirmationOfInputTask5_1'
+      )
+      const confirmationOfInputTask5_2 = d.querySelector(
+        '.confirmationOfInputTask5_2'
+      )
+      const confirmationOfInputTask5_3 = d.querySelector(
+        '.confirmationOfInputTask5_3'
+      )
+
+      // function insertDataIntoCookies(input) {
+      //   d.cookie = `${input}=${input.value}`
+      //   console.log(getCookie(`${input}`))
+      //   console.log(`${input.value}`)
+      // }
+      // confirmationOfInputTask5_1.addEventListener(
+      //   'click',
+      //   insertDataIntoCookies.bind(someTextTask5_1)
+      // )
+
+      function savingChanges(e) {
+        d.cookie = `${e.target.className}=${e.target.value}`
+      }
+
+      confirmationOfInputTask5_1.addEventListener('click', () => {
+        d.cookie = `someTextTask5_1=${someTextTask5_1.value}`
+      })
+
+      confirmationOfInputTask5_2.addEventListener('click', () => {
+        d.cookie = `someTextTask5_2=${someTextTask5_2.value}`
+      })
+
+      confirmationOfInputTask5_3.addEventListener('click', () => {
+        d.cookie = `someTextTask5_3=${someTextTask5_3.value}`
+      })
+
+      for (let i = 0; i < entryField.length; i++) {
+        entryField[i].addEventListener('input', savingChanges)
+      }
+
+      if (getCookie('someTextTask5_1') !== undefined) {
+        someTextTask5_1.value = getCookie('someTextTask5_1')
+      }
+      if (getCookie('someTextTask5_2') !== undefined) {
+        someTextTask5_2.value = getCookie('someTextTask5_2')
+      }
+      if (getCookie('someTextTask5_3') !== undefined) {
+        someTextTask5_3.value = getCookie('someTextTask5_3')
+      }
+      if (getCookie2('someTextTask5_4') !== undefined) {
+        someTextTask5_4.value = getCookie2('someTextTask5_4')
+      }
+      if (getCookie2('someTextTask5_5') !== undefined) {
+        someTextTask5_5.value = getCookie2('someTextTask5_5')
+      }
+      if (getCookie2('someTextTask5_6') !== undefined) {
+        someTextTask5_6.value = getCookie2('someTextTask5_6')
+      }
+
+      // задание 6
     </script>
   </body>
 </html>
