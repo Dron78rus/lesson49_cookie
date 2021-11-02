@@ -128,6 +128,29 @@
       отмеченными так, как это сделал пользователь ранее.
     </div>
 
+    <label>
+      <input type="checkbox" class="accept" id="checkbox1" name="accept" />
+      Какая-то надпись
+    </label>
+    <label>
+      <input type="checkbox" class="accept" id="checkbox2" name="accept2" />
+      Какая-то надпись 2
+    </label>
+    <label>
+      <input type="checkbox" class="accept" id="checkbox3" name="accept3" />
+      Какая-то надпись 3
+    </label>
+
+    <p>Задание 7</p>
+
+    <div class="task">
+      При заходе на страницу появляется счетчик обратного отсчета. Когда он
+      доходит до нуля, на странице пишется - 'отсчет закончен'. При обновлении
+      страницы счетчик не должен начинать идти заново
+    </div>
+
+    <div class="container divT7"><div></div></div>
+
     <script>
       // http://old.code.mu/tasks/javascript/advanced/rabota-s-kuki-v-javascript.html
 
@@ -369,6 +392,59 @@
       }
 
       // задание 6
+
+      const accept = d.querySelectorAll('.accept')
+
+      for (let elem of accept) {
+        elem.addEventListener('change', storingCheckboxValue)
+      }
+
+      function storingCheckboxValue(e) {
+        d.cookie = `${e.target.id}=${e.target.checked}`
+        console.log(`${e.target.id}=${e.target.checked}`)
+      }
+
+      for (let elem of accept) {
+        elem.checked = JSON.parse(getCookie(`${elem.id}`))
+        console.log(JSON.parse(getCookie(`${elem.id}`)))
+        // getCookie(`${elem.id}`) ? elem.checked : elem.unchecked
+        // console.log(elem.checked)
+      }
+
+      // задание 7
+
+      const divT7 = d.querySelector('.divT7')
+      let count
+
+      function countdown() {
+        if (
+          getCookie('count') == undefined ||
+          getCookie('count') == 'отсчет закончен' ||
+          Number(getCookie('count')) < 0
+        ) {
+          return (count = 20)
+        } else {
+          return (count = getCookie('count'))
+        }
+      }
+
+      function startCountingT7(count) {
+        let str = Number(count)
+        timerId2 = setInterval(() => {
+          divT7.removeChild(divT7.lastChild)
+
+          if (str == 0) {
+            str = 'отсчет закончен'
+            clearInterval(timerId2)
+          } else {
+            str--
+          }
+          d.cookie = `count=${str}`
+          outputOfResult(divT7, str)
+        }, 1000)
+      }
+
+      startCountingT7(countdown())
     </script>
   </body>
 </html>
