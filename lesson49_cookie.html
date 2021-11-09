@@ -34,6 +34,10 @@
       .entryField {
         display: block;
       }
+      .button {
+        height: 20px;
+        width: 25px;
+      }
     </style>
 
     <p>Задание 1</p>
@@ -150,6 +154,35 @@
     </div>
 
     <div class="container divT7"><div></div></div>
+
+    <p>Задание 8</p>
+
+    <div class="task">
+      Дан текстареа. Пользователь может потянуть за его угол и изменить его
+      размер. Сделайте так, чтобы при следующем заходе на страницу, текстареа
+      был заданного размера.
+    </div>
+
+    <div class="container divT8"><textarea class="textareaT8"></textarea></div>
+
+    <p>Задание 9</p>
+
+    <div class="task">
+      Дан инпут. В него можно ввести данные, затем поредактировать их, затем еще
+      поредактировать. Пусть инпут хранит историю своих изменений (даже после
+      перезагрузки страницы). Сверху над инпутом должны появится стрелочки, с
+      помощью которых можно перемещаться по истории.
+    </div>
+
+    <input type="button" value="↶" class="button Back" />
+    <input type="button" value="↷" class="button Forward" />
+
+    <input type="text" class="entryField someTextTask9" />
+    <input
+      type="button"
+      value="Сохранить изменения"
+      class="confirmationOfInputTask9"
+    />
 
     <script>
       // http://old.code.mu/tasks/javascript/advanced/rabota-s-kuki-v-javascript.html
@@ -445,6 +478,64 @@
       }
 
       startCountingT7(countdown())
+
+      // задание 8
+
+      const textareaT8 = d.querySelector('.textareaT8')
+
+      textareaT8.addEventListener('mouseup', () => {
+        d.cookie = `areaT8Height=${textareaT8.clientHeight}`
+        d.cookie = `areaT8Width=${textareaT8.clientWidth}`
+      })
+
+      if (
+        getCookie('areaT8Height') !== undefined &&
+        getCookie('areaT8Width') !== undefined
+      ) {
+        textareaT8.style.height = `${getCookie('areaT8Height')}px`
+        textareaT8.style.width = `${getCookie('areaT8Width')}px`
+      }
+
+      // задание 9
+
+      const buttonBack = d.querySelector('.Back')
+      const buttonForward = d.querySelector('.Forward')
+      const SomeTextTask9 = d.querySelector('.someTextTask9')
+      const confirmationOfInputTask9 = d.querySelector(
+        '.confirmationOfInputTask9'
+      )
+      let countT9 = 1
+
+      if (getCookie('countT9') !== undefined) {
+        countT9 = getCookie('countT9')
+        console.log(`1countT9=${countT9}`)
+      }
+
+      SomeTextTask9.value = getCookie(`task9val${countT9}`)
+
+      confirmationOfInputTask9.addEventListener('click', () => {
+        countT9++
+        d.cookie = `task9val${countT9}=${SomeTextTask9.value}`
+        d.cookie = `countT9=${countT9}`
+        console.log(`task9val${countT9}=${SomeTextTask9.value}`)
+        console.log(`countT9=${countT9}`)
+      })
+
+      buttonBack.addEventListener('click', () => {
+        if (countT9 > 1) {
+          countT9--
+        }
+        SomeTextTask9.value = getCookie(`task9val${countT9}`)
+        console.log(`countT9=${countT9}`)
+      })
+
+      buttonForward.addEventListener('click', () => {
+        if (countT9 < getCookie('countT9')) {
+          countT9++
+        }
+        SomeTextTask9.value = getCookie(`task9val${countT9}`)
+        console.log(`countT9=${countT9}`)
+      })
     </script>
   </body>
 </html>
