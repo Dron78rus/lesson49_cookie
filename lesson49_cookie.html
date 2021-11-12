@@ -38,6 +38,9 @@
         height: 20px;
         width: 25px;
       }
+      .divT11 {
+        display: inline;
+      }
     </style>
 
     <p>Задание 1</p>
@@ -183,6 +186,28 @@
       value="Сохранить изменения"
       class="confirmationOfInputTask9"
     />
+
+    <p>Задание 10</p>
+
+    <div class="task">
+      Дан сайт. Пусть каждая страница для каждого посетителя хранит время
+      последнего захода и количество заходов на нее этим посетителем. Пусть эти
+      данные показываются при заходе в формате 'с последнего захода прошло ...
+      вы посещали эту страницу ... раз'.
+    </div>
+
+    <div class="container divT10"></div>
+
+    <p>Задание 11</p>
+
+    <div class="task">
+      Пусть по заходу на страницу показывается определенный рекламный текст.
+      Рядом с ним сделайте кнопку 'убрать', по нажатию на которую этот рекламный
+      текст не показывается этому пользователю ровно 10 сек.
+    </div>
+
+    <div class="container divT11">определенный рекламный текст.</div>
+    <input type="button" value="Убрать" class="buttonT11" />
 
     <script>
       // http://old.code.mu/tasks/javascript/advanced/rabota-s-kuki-v-javascript.html
@@ -535,6 +560,111 @@
         }
         SomeTextTask9.value = getCookie(`task9val${countT9}`)
         console.log(`countT9=${countT9}`)
+      })
+
+      // задание 10
+
+      const divT10 = d.querySelector('.divT10')
+      let countT10
+
+      function checkingUserVisitsToThePage() {
+        let dateNow = new Date()
+        let lastLoginDate = new Date(getCookie('date'))
+
+        if (getCookie('countT10') !== undefined) {
+          countT10 = getCookie('countT10')
+        } else countT10 = 1
+
+        if (countT10 == 1) {
+          divT10.textContent = `Вы на нашем сайте впервые`
+        } else {
+          divT10.textContent = `Вы были на нашем сайте ${countT10} раз`
+
+          divT10.innerHTML += `<br> С последнего посещения сайта прошло ${
+            dateNow.getMonth() - lastLoginDate.getMonth()
+          } месяцев ${
+            dateNow.getDate() - lastLoginDate.getDate()
+          } дней ${numberOfHours()} часов ${numberOfMinutes()} минут ${numberOfSeconds()} секунд`
+        }
+
+        function numberOfHours() {
+          let a = dateNow.getHours() - lastLoginDate.getHours()
+          if (a < 0) {
+            return 60 + a
+          } else return a
+        }
+
+        function numberOfMinutes() {
+          let a = dateNow.getMinutes() - lastLoginDate.getMinutes()
+          if (a < 0) {
+            return 60 + a
+          } else return a
+        }
+
+        function numberOfSeconds() {
+          let a = dateNow.getSeconds() - lastLoginDate.getSeconds()
+          if (a < 0) {
+            return 60 + a
+          } else return a
+        }
+
+        countT10++
+
+        d.cookie = `date=${dateNow}`
+        d.cookie = `countT10=${countT10}`
+      }
+
+      d.addEventListener('DOMContentLoaded', checkingUserVisitsToThePage)
+
+      // задание 11
+
+      const divT11 = d.querySelector('.divT11')
+      const buttonT11 = d.querySelector('.buttonT11')
+      let advertisingCancellationTime = new Date(getCookie('dateT11'))
+      let dateT11 = new Date()
+      let interval =
+        dateT11.getSeconds() - advertisingCancellationTime.getSeconds()
+      interval = interval > 0 ? interval : 60 + interval
+
+      console.log(interval)
+
+      if (getCookie('dateT11') == undefined) {
+        advertisingCancellationTime = dateT11
+      }
+
+      if (interval > 10) {
+        divT11.style.display = 'inline'
+        buttonT11.style.display = 'inline'
+      }
+
+      changingVisibility()
+
+      function changingVisibility() {
+        if (
+          interval < 10 &&
+          dateT11.getMinutes() - advertisingCancellationTime.getMinutes() == 0
+        ) {
+          divT11.style.display = 'none'
+          buttonT11.style.display = 'none'
+
+          timerId3 = setTimeout(() => {
+            divT11.style.display = 'inline'
+            buttonT11.style.display = 'inline'
+            clearTimeout(timerId3)
+          }, 10000)
+        }
+      }
+
+      console.log(
+        dateT11.getSeconds() - advertisingCancellationTime.getSeconds()
+      )
+
+      buttonT11.addEventListener('click', () => {
+        divT11.style.display = 'none'
+        buttonT11.style.display = 'none'
+        dateT11 = new Date()
+        d.cookie = `dateT11=${dateT11}`
+        changingVisibility()
       })
     </script>
   </body>
